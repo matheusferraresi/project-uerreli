@@ -10,11 +10,15 @@ public class PlayerController : MonoBehaviour
     private PlayerControls _playerControls;
     private Vector2 _movement;
     private Rigidbody2D _rb;
+    private Animator _animator;
+    private SpriteRenderer _spriteRenderer;
 
     private void Awake()
     {
         _playerControls = new PlayerControls();
         _rb = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable()
@@ -29,12 +33,15 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        AdjustPlayerFacingDirection();
         Move();
     }
 
     private void PlayerInput()
     {
         _movement = _playerControls.Movement.Move.ReadValue<Vector2>();
+        _animator.SetFloat("moveX", _movement.x);
+        _animator.SetFloat("moveY", _movement.y);
     }
 
     private void Move()
@@ -42,5 +49,21 @@ public class PlayerController : MonoBehaviour
         // Multiplying floats first here means you multiply the Vector only once and improves speed
         Vector2 newPosition = _rb.position + _movement * (moveSpeed * Time.fixedDeltaTime);
         _rb.MovePosition(newPosition);
+    }
+
+    private void AdjustPlayerFacingDirection()
+    {
+        bool shouldLookRight = true;
+        Vector3 mousePosition = Input.mousePosition;
+        Vector3 playerPosition = Camera.main.WorldToScreenPoint(transform.position);
+
+        if (mousePosition.x < playerPosition.x)
+        {
+            _spriteRenderer.flipX = true;
+        }
+        else
+        {
+            _spriteRenderer.flipX = false;
+        }
     }
 }

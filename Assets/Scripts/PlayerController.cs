@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    
     [SerializeField] private float moveSpeed = 1f;
 
     private PlayerControls _playerControls;
@@ -12,6 +13,13 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rb;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+
+    private bool _facingLeft = false;
+    public bool FacingLeft
+    {
+        get { return _facingLeft;  }
+        set { _facingLeft = value; }
+    }
 
     private void Awake()
     {
@@ -59,10 +67,12 @@ public class PlayerController : MonoBehaviour
         if (mousePosition.x < playerPosition.x)
         {
             _spriteRenderer.flipX = true;
+            _facingLeft = true;
         }
         else
         {
             _spriteRenderer.flipX = false;
+            _facingLeft = false;
         }
     }
 }

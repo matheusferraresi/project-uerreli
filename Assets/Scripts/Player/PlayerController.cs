@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private TrailRenderer playerTrailRenderer;
     [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float dashSpeed = 4f;
+    [SerializeField] private float dashTime = .2f;
+    [SerializeField] private float dashCooldown = .25f;
 
     public static PlayerController Instance; 
 
@@ -14,6 +18,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rb;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    
+    private float _baseMoveSpeed;
+    private bool _isDashing;
 
     private bool _facingLeft = false;
     public bool FacingLeft
@@ -29,11 +36,17 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _baseMoveSpeed = moveSpeed;
     }
 
     private void OnEnable()
     {
         _playerControls.Enable();
+    }
+
+    private void Start()
+    {
+        _playerControls.Combat.Dash.performed += _ => Dash();
     }
 
     private void Update()
@@ -76,5 +89,25 @@ public class PlayerController : MonoBehaviour
             _spriteRenderer.flipX = false;
             _facingLeft = false;
         }
+    }
+
+    private void Dash()
+    {
+        if (_isDashing) return;
+        
+        _isDashing = true;
+        moveSpeed *= dashSpeed;
+        playerTrailRenderer.emitting = true;
+        StartCoroutine(EndDashRoutine());
+    }
+
+    private IEnumerator EndDashRoutine()
+    {
+        yield return new WaitForSeconds(dashTime);
+        moveSpeed = _baseMoveSpeed;
+        playerTrailRenderer.emitting = false;
+        
+        yield return new WaitForSeconds(dashCooldown);
+        _isDashing = false;
     }
 }

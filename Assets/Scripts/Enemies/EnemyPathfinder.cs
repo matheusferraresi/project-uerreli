@@ -11,6 +11,8 @@ public class EnemyPathfinder : MonoBehaviour
         Roaming
     }
 
+    [SerializeField] private float roamingChangeTimer = 2f;
+
     private State _state;
     private EnemyAI _enemyAI;
 
@@ -31,7 +33,7 @@ public class EnemyPathfinder : MonoBehaviour
         {
             Vector2 roamPosition = GetRoamingPosition();
             _enemyAI.MoveTo(roamPosition);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(roamingChangeTimer);
         }
     }
 

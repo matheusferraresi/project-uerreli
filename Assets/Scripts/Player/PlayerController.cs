@@ -23,11 +23,7 @@ public class PlayerController : MonoBehaviour
     private bool _isDashing;
 
     private bool _facingLeft = false;
-    public bool FacingLeft
-    {
-        get { return _facingLeft;  }
-        set { _facingLeft = value; }
-    }
+    public bool FacingLeft => _facingLeft;
 
     private void Awake()
     {

@@ -9,7 +9,7 @@ public class AreaExit : MonoBehaviour
     [SerializeField] private string sceneToLoad;
     [SerializeField] private string sceneTransitionName;
 
-    private float waitToLoadTime = 1f;
+    private float _waitToLoadTime = 1f;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.GetComponent<PlayerController>())
@@ -21,7 +21,7 @@ public class AreaExit : MonoBehaviour
 
     private IEnumerator LoadSceneRoutine()
     {
-        yield return new WaitForSeconds(waitToLoadTime);
+        yield return new WaitForSeconds(_waitToLoadTime);
         
         SceneManager.LoadScene(sceneToLoad);
         SceneManagement.Instance.SetTransitionName(sceneTransitionName);

@@ -3,15 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] private TrailRenderer playerTrailRenderer;
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float dashSpeed = 4f;
     [SerializeField] private float dashTime = .2f;
     [SerializeField] private float dashCooldown = .25f;
-
-    public static PlayerController Instance; 
 
     private PlayerControls _playerControls;
     private Vector2 _movement;
@@ -21,13 +19,14 @@ public class PlayerController : MonoBehaviour
     
     private float _baseMoveSpeed;
     private bool _isDashing;
-
+  
     private bool _facingLeft = false;
     public bool FacingLeft => _facingLeft;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
+        
         _playerControls = new PlayerControls();
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();

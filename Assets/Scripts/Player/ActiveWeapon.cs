@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ActiveWeapon : Singleton<ActiveWeapon>
 {
-    [SerializeField] private MonoBehaviour currentActiveWeapon;
+    public MonoBehaviour CurrentActiveWeapon { get; private set; }
     
     private PlayerControls _playerControls;
     
@@ -56,7 +57,17 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
         if (_attackButtonDown && !_isAttacking)
         {
             _isAttacking = true;
-            (currentActiveWeapon as IWeapon)?.Attack();
+            (CurrentActiveWeapon as IWeapon)?.Attack();
         }
+    }
+    
+    public void NewWeapon(MonoBehaviour newWeapon)
+    {
+        CurrentActiveWeapon = newWeapon;
+    }
+    
+    public void RemoveWeapon()
+    {
+        CurrentActiveWeapon = null;
     }
 }

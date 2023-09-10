@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] private TrailRenderer playerTrailRenderer;
+    [SerializeField] private Transform weaponCollider;
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float dashSpeed = 4f;
     [SerializeField] private float dashTime = .2f;
@@ -104,5 +105,10 @@ public class PlayerController : Singleton<PlayerController>
         
         yield return new WaitForSeconds(dashCooldown);
         _isDashing = false;
+    }
+
+    public Transform GetWeaponCollider()
+    {
+        return weaponCollider;
     }
 }

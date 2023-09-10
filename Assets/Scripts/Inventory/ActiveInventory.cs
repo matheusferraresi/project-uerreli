@@ -22,13 +22,15 @@ public class ActiveInventory : MonoBehaviour
     private void Start()
     {
         _playerControls.Inventory.Keyboard.performed += ctx => ToggleActiveSlot((int)ctx.ReadValue<float>());
+        
+        ToggleActiveHighlight(0);
     }
-    
+
     private void ToggleActiveSlot(int slotIndexNum)
     {
-        ToggleActiveHighlight(slotIndexNum);
+        ToggleActiveHighlight(slotIndexNum - 1);
     }
-    
+
     private void ToggleActiveHighlight(int slotIndexNum)
     {
         activeSlotIndexNum = slotIndexNum;
@@ -37,7 +39,40 @@ public class ActiveInventory : MonoBehaviour
         {
             inventorySlot.GetChild(0).gameObject.SetActive(false);
         }
+
+        transform.GetChild(slotIndexNum).GetChild(0).gameObject.SetActive(true);
+
+        ChangeActiveWeapon();
+    }
+
+    private void ChangeActiveWeapon()
+    {
+        // If there is a weapon in the active slot, destroy it
+        if (ActiveWeapon.Instance.CurrentActiveWeapon != null)
+        {
+            Destroy(ActiveWeapon.Instance.CurrentActiveWeapon.gameObject);
+        }
+
+        // If there is no weapon in the active slot, remove the weapon
+        if (!transform.GetChild(activeSlotIndexNum).GetComponentInChildren<InventorySlot>())
+        {
+            ActiveWeapon.Instance.RemoveWeapon();
+            return;
+        }
         
-        transform.GetChild(slotIndexNum - 1).GetChild(0).gameObject.SetActive(true);
+        // Get the weapon prefab from the active slot
+        // transform.GetChild(activeSlotIndexNum)
+        // Get the weapon info from the weapon prefab
+        // GetComponent<InventorySlot>().GetWeaponInfo()._weaponPrefab;
+        GameObject weaponToSpawn = transform.GetChild(activeSlotIndexNum).GetComponent<InventorySlot>()
+            .GetWeaponInfo()._weaponPrefab;
+
+        // Spawn the weapon prefab
+        GameObject newWeapon = Instantiate(weaponToSpawn, ActiveWeapon.Instance.transform.position,
+            ActiveWeapon.Instance.transform.rotation);
+        
+        newWeapon.transform.parent = ActiveWeapon.Instance.transform;
+        
+        ActiveWeapon.Instance.NewWeapon(newWeapon.GetComponent<MonoBehaviour>());
     }
 }

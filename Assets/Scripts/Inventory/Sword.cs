@@ -45,7 +45,7 @@ public class Sword : MonoBehaviour, IWeapon
         StartCoroutine(AttackCooldownRoutine());
     }
 
-    public void AnimationDoneAtacking()
+    public void AnimationDoneAttacking()
     {
         _weaponCollider.gameObject.SetActive(false);
     }

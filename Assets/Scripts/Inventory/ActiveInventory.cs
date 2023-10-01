@@ -72,7 +72,7 @@ public class ActiveInventory : MonoBehaviour
             ActiveWeapon.Instance.transform.rotation);
         
         // Zero out the rotation of the active weapon
-        ActiveWeapon.Instance.transform.rotation = Quaternion.Euler(0, 0, 0);
+        // ActiveWeapon.Instance.transform.rotation = Quaternion.Euler(0, 0, 0);
         
         newWeapon.transform.parent = ActiveWeapon.Instance.transform;
         

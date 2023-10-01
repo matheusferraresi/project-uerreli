@@ -15,15 +15,15 @@ public class Bow : MonoBehaviour, IWeapon
     {
         _animator = GetComponent<Animator>();
     }
-    
+
     public void Attack()
     {
+        _animator.SetTrigger(Fire);
         GameObject newArrow =
             Instantiate(arrowPrefab, arrowSpawnPoint.transform.position, ActiveWeapon.Instance.transform.rotation);
-        
-        _animator.SetTrigger(Fire);
+        newArrow.GetComponent<Projectile>().SetWeaponInfo(weaponInfo);
     }
-    
+
     public WeaponInfo GetWeaponInfo()
     {
         return weaponInfo;

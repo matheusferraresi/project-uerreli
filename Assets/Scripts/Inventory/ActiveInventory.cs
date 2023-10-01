@@ -65,7 +65,7 @@ public class ActiveInventory : MonoBehaviour
         // Get the weapon info from the weapon prefab
         // GetComponent<InventorySlot>().GetWeaponInfo()._weaponPrefab;
         GameObject weaponToSpawn = transform.GetChild(activeSlotIndexNum).GetComponent<InventorySlot>()
-            .GetWeaponInfo()._weaponPrefab;
+            .GetWeaponInfo().weaponPrefab;
 
         // Spawn the weapon prefab
         GameObject newWeapon = Instantiate(weaponToSpawn, ActiveWeapon.Instance.transform.position,

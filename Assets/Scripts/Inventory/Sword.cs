@@ -8,6 +8,7 @@ public class Sword : MonoBehaviour, IWeapon
 {
     [SerializeField] private GameObject slashAnimationPrefab;
     [SerializeField] private Transform slashAnimationSpawnPoint;
+    [SerializeField] private WeaponInfo weaponInfo;
     [SerializeField] private float swordCooldown = .5f;
 
     private Transform _weaponCollider;
@@ -41,8 +42,6 @@ public class Sword : MonoBehaviour, IWeapon
 
         _slashAnimation = Instantiate(slashAnimationPrefab, slashAnimationSpawnPoint.position, quaternion.identity);
         _slashAnimation.transform.parent = this.transform.parent;
-
-        StartCoroutine(AttackCooldownRoutine());
     }
 
     public void AnimationDoneAttacking()
@@ -69,6 +68,11 @@ public class Sword : MonoBehaviour, IWeapon
             _slashAnimation.GetComponent<SpriteRenderer>().flipX = true;
         }
     }
+    
+    public WeaponInfo GetWeaponInfo()
+    {
+        return weaponInfo;
+    }
 
     private void MouseFollowWithOffset()
     {
@@ -87,11 +91,5 @@ public class Sword : MonoBehaviour, IWeapon
             ActiveWeapon.Instance.transform.rotation = Quaternion.Euler(0, 0, angle);
             _weaponCollider.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-    }
-
-    private IEnumerator AttackCooldownRoutine()
-    {
-        yield return new WaitForSeconds(swordCooldown);
-        ActiveWeapon.Instance.ToggleIsAttacking(false);
     }
 }

@@ -27,12 +27,6 @@ public class Staff : MonoBehaviour, IWeapon
         _animator.SetTrigger(StaffAttack);
     }
     
-    public void Shoot()
-    {
-        GameObject magicLaserInstance = Instantiate(magicLaser, magicLaserSpawnPoint.position, magicLaserSpawnPoint.rotation);
-        // magicLaserInstance.GetComponent<MagicLaser>().SetDamage(weaponInfo.damage);
-    }
-    
     public WeaponInfo GetWeaponInfo()
     {
         return weaponInfo;
@@ -40,7 +34,8 @@ public class Staff : MonoBehaviour, IWeapon
 
     public void SpawnStaffProjectileAnimationEvent()
     {
-        Shoot();
+        GameObject magicLaserInstance = Instantiate(magicLaser, magicLaserSpawnPoint.position, magicLaserSpawnPoint.rotation);
+        magicLaserInstance.GetComponent<MagicLaser>().UpdateLaserRange(weaponInfo.weaponRange);
     }
     
     private void MouseFollowWithOffset()

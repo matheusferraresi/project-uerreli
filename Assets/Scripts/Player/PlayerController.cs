@@ -17,6 +17,7 @@ public class PlayerController : Singleton<PlayerController>
     private Rigidbody2D _rb;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    private Knockback _knockBack;
     
     private float _baseMoveSpeed;
     private bool _isDashing;
@@ -32,6 +33,7 @@ public class PlayerController : Singleton<PlayerController>
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _knockBack = GetComponent<Knockback>();
         _baseMoveSpeed = moveSpeed;
     }
 
@@ -65,6 +67,8 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Move()
     {
+        if (_knockBack.GettingKnockedBack) return;
+        
         // Multiplying floats first here means you multiply the Vector only once and improves speed
         Vector2 newPosition = _rb.position + _movement * (moveSpeed * Time.fixedDeltaTime);
         _rb.MovePosition(newPosition);

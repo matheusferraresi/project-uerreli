@@ -1,38 +1,112 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 2f;
+    private enum State
+    {
+        Roaming,
+        Attacking
+    }
 
-    private Rigidbody2D _rigidbody;
-    private Vector2 _movePosition;
-    private Knockback _knockback;
-    private SpriteRenderer _spriteRenderer;
+    [SerializeField] private MonoBehaviour enemyType;
+    [SerializeField] private float roamingChangeTimer = 2f;
+    [SerializeField] private float attackRange = 5f;
+    [SerializeField] private float attackCooldown = 2f;
+    [SerializeField] private bool stopOnAttack;
+
+    private State _state;
+    private EnemyPathfinding _enemyPathfinding;
+    private Vector2 _roamPosition;
+    private float _roamingTimer;
+    private bool _canAttack = true;
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _knockback = GetComponent<Knockback>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _state = State.Roaming;
+        _enemyPathfinding = GetComponent<EnemyPathfinding>();
     }
-    
-    private void FixedUpdate()
+
+    private void Start()
     {
-        if (_knockback.GettingKnockedBack) { return; }
+        _roamPosition = GetRoamingPosition();
+    }
+
+    private void Update()
+    {
+        MovementStateControl();
+    }
+
+    private void MovementStateControl()
+    {
+        switch (_state)
+        {
+            case State.Roaming:
+                Roaming();
+                break;
+            case State.Attacking:
+                Attacking();
+                break;
+            default:
+                Debug.LogError("Invalid state: " + _state);
+                break;
+        }
+    }
+
+    private void Roaming()
+    {
+        _roamingTimer += Time.deltaTime;
+        _enemyPathfinding.MoveTo(_roamPosition);
+
+        if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) < attackRange)
+        {
+            _state = State.Attacking;
+        }
         
-        // Multiplying floats first here means you multiply the Vector only once and improves speed
-        Vector2 newPosition = _rigidbody.position + _movePosition * (moveSpeed * Time.fixedDeltaTime);
-        _rigidbody.MovePosition(newPosition);
-
-        _spriteRenderer.flipX = _movePosition.x < 0;
+        if (_roamingTimer > roamingChangeTimer)
+        {
+            _roamingTimer = 0f;
+        }
     }
 
-    public void MoveTo(Vector2 targetPosition)
+    private void Attacking()
     {
-        _movePosition = targetPosition;
+        if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) > attackRange)
+        {
+            _state = State.Roaming;
+        }
+        
+        if (_canAttack && attackRange != 0)
+        {
+            _canAttack = false;
+            (enemyType as IEnemy)?.Attack();
+
+            if (stopOnAttack)
+            {
+                _enemyPathfinding.StopMoving();
+            }
+            else
+            {
+                _enemyPathfinding.MoveTo(GetRoamingPosition());
+            }
+
+            StartCoroutine(AttackCooldownRoutine());
+        }
+    }
+
+    private IEnumerator AttackCooldownRoutine()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        _canAttack = true;
+    }
+
+    private Vector2 GetRoamingPosition()
+    {
+        _roamingTimer = 0f;
+        return new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
     }
 }

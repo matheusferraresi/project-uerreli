@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private GameObject onHitVFX;
     [SerializeField] private bool isEnemyProjectile;
     [SerializeField] private float projectileRange = 10f;
-    
+
     private Vector3 _startPosition;
 
     private void Start()
@@ -23,30 +23,40 @@ public class Projectile : MonoBehaviour
         MoveProjectile();
         DetectRange();
     }
-    
+
     public void SetWeaponRange(float projectileRange)
     {
         this.projectileRange = projectileRange;
     }
 
+    private void HandleHit()
+    {
+        Instantiate(onHitVFX, transform.position, transform.rotation);
+        Destroy(gameObject);
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.isTrigger) return;
+
         EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
         Indestructible indestructible = other.GetComponent<Indestructible>();
         PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
 
-        if (!other.isTrigger && (enemyHealth || indestructible || playerHealth))
+        if (enemyHealth || indestructible || playerHealth)
         {
-            if (playerHealth & isEnemyProjectile)
+            if ((playerHealth & isEnemyProjectile) || (enemyHealth & !isEnemyProjectile))
             {
-                playerHealth.TakeDamage(1, transform);
+                playerHealth?.TakeDamage(1, transform);
+                HandleHit();
             }
-            
-            Instantiate(onHitVFX, transform.position, transform.rotation);
-            Destroy(gameObject);
+            else if (indestructible)
+            {
+                HandleHit();
+            }
         }
     }
-    
+
     private void DetectRange()
     {
         if (Vector3.Distance(_startPosition, transform.position) > projectileRange)

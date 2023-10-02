@@ -28,9 +28,9 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        EnemyAI enemyAI = other.collider.GetComponent<EnemyAI>();
+        EnemyPathfinding enemyPathfinding = other.collider.GetComponent<EnemyPathfinding>();
 
-        if (enemyAI)
+        if (enemyPathfinding)
         {
             TakeDamage(1, other.transform);
         }

@@ -6,7 +6,8 @@ using UnityEngine;
 public class MagicLaser : MonoBehaviour
 {
     [SerializeField] private float laserSpeed = 2f;
-    
+
+    private bool _isGrowing = true;
     private float _laserRange;
     private SpriteRenderer _spriteRenderer;
     private CapsuleCollider2D _capsuleCollider2D;
@@ -22,17 +23,29 @@ public class MagicLaser : MonoBehaviour
         LaserFaceMouse();
     }
 
-    public void UpdateLaserRange(float laserRange)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        _laserRange = laserRange;
-        StartCoroutine(IncreaseLaserLengthRoutine());
+        if (other.gameObject.GetComponent<Indestructible>() && !other.isTrigger)
+        {
+            _isGrowing = false;
+        }
     }
 
+    private void LaserFaceMouse()
+    {
+        Vector3 mousePosition = Input.mousePosition;
+        mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+        Vector2 direction = transform.position - mousePosition;
+
+        transform.right = -direction;
+    }
+    
     private IEnumerator IncreaseLaserLengthRoutine()
     {
         float timePassed = 0f;
 
-        while (_spriteRenderer.size.x < _laserRange)
+        while (_spriteRenderer.size.x < _laserRange && _isGrowing)
         {
             timePassed += Time.deltaTime;
             float linearTime = timePassed / laserSpeed;
@@ -49,14 +62,10 @@ public class MagicLaser : MonoBehaviour
 
         StartCoroutine(GetComponent<SpriteFade>().SlowFadeRoutine());
     }
-
-    private void LaserFaceMouse()
+    
+    public void UpdateLaserRange(float laserRange)
     {
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
-
-        Vector2 direction = transform.position - mousePosition;
-
-        transform.right = -direction;
+        _laserRange = laserRange;
+        StartCoroutine(IncreaseLaserLengthRoutine());
     }
 }

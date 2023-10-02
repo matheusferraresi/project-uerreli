@@ -53,19 +53,24 @@ public class ActiveInventory : MonoBehaviour
             Destroy(ActiveWeapon.Instance.CurrentActiveWeapon.gameObject);
         }
 
-        // If there is no weapon in the active slot, remove the weapon
-        if (!transform.GetChild(activeSlotIndexNum).GetComponentInChildren<InventorySlot>())
-        {
-            ActiveWeapon.Instance.RemoveWeapon();
-            return;
-        }
-        
         // Get the weapon prefab from the active slot
         // transform.GetChild(activeSlotIndexNum)
         // Get the weapon info from the weapon prefab
         // GetComponent<InventorySlot>().GetWeaponInfo()._weaponPrefab;
-        GameObject weaponToSpawn = transform.GetChild(activeSlotIndexNum).GetComponent<InventorySlot>()
-            .GetWeaponInfo().weaponPrefab;
+        // GameObject weaponToSpawn = transform.GetChild(activeSlotIndexNum).GetComponent<InventorySlot>()
+        //     .GetWeaponInfo().weaponPrefab;
+
+        Transform childTransform = transform.GetChild(activeSlotIndexNum);
+        InventorySlot inventorySlot = childTransform.GetComponentInChildren<InventorySlot>();
+        WeaponInfo weaponInfo = inventorySlot.GetWeaponInfo();
+        GameObject weaponToSpawn = weaponInfo.weaponPrefab;
+        
+        // If there is no weapon in the active slot, remove the weapon
+        if (weaponInfo == null)
+        {
+            ActiveWeapon.Instance.RemoveWeapon();
+            return;
+        }
 
         // Spawn the weapon prefab
         GameObject newWeapon = Instantiate(weaponToSpawn, ActiveWeapon.Instance.transform.position,

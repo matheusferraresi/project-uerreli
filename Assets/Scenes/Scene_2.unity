@@ -21823,16 +21823,36 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
+      propertyPath: stagger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
+      propertyPath: oscilate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: restTime
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
+      propertyPath: oscillate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: burstCount
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: angleSpread
-      value: 45
+      value: 95
+      objectReference: {fileID: 0}
+    - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 6577947061745551454, guid: 79bf442c029fa574db04df6352c74107, type: 3}
+    - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
+      propertyPath: bulletMoveSpeed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: projectilePrefab
@@ -21840,19 +21860,19 @@ PrefabInstance:
       objectReference: {fileID: 6577947061745551454, guid: 79bf442c029fa574db04df6352c74107, type: 3}
     - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: startingDistance
-      value: 0.1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: timeBetweenBursts
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: projectileMoveSpeed
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1469069771024164554, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: projectilesPerBurst
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3727685571968789931, guid: fab3b2f3964467d49ae0fd4252d61fba, type: 3}
       propertyPath: stopOnAttack

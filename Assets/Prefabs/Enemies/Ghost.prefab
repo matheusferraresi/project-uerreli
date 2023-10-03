@@ -168,10 +168,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84252810f8c1b89459bc07a44806abd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: {fileID: 1469069771024164554}
-  roamingChangeTimer: 2
+  roamChangeDirFloat: 2
   attackRange: 5
+  enemyType: {fileID: 1469069771024164554}
   attackCooldown: 2
+  stopMovingWhileAttacking: 0
 --- !u!114 &5314372513100353309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,7 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 7
   deathVFXPrefab: {fileID: 8024184815812781766, guid: aed0ec32057097f49a545f823588ba4a, type: 3}
-  knockbackThrust: 15
+  knockBackThrust: 15
 --- !u!114 &1808554863107701129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +252,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: babf40e984a5ba34689959d89eec220d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectilePrefab: {fileID: 6577947061745551454, guid: 79bf442c029fa574db04df6352c74107, type: 3}
+  bulletPrefab: {fileID: 6577947061745551454, guid: 79bf442c029fa574db04df6352c74107, type: 3}
+  bulletMoveSpeed: 5
+  burstCount: 8
+  projectilesPerBurst: 8
+  angleSpread: 95
+  startingDistance: 0.3
+  timeBetweenBursts: 1
+  restTime: 0.5
+  stagger: 1
+  oscillate: 1
 --- !u!1 &5781823331412969612
 GameObject:
   m_ObjectHideFlags: 0

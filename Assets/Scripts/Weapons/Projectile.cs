@@ -6,10 +6,10 @@ using UnityEngine.Serialization;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float projectileSpeed = 22f;
     [SerializeField] private GameObject onHitVFX;
-    [SerializeField] private bool isEnemyProjectile;
+    [SerializeField] private float projectileSpeed = 22f;
     [SerializeField] private float projectileRange = 10f;
+    [SerializeField] private bool isEnemyProjectile;
 
     private Vector3 _startPosition;
 
@@ -24,9 +24,14 @@ public class Projectile : MonoBehaviour
         DetectRange();
     }
 
-    public void SetWeaponRange(float projectileRange)
+    public void SetProjectileRange(float newProjectileRange)
     {
-        this.projectileRange = projectileRange;
+        this.projectileRange = newProjectileRange;
+    }
+    
+    public void SetProjectileSpeed(float newProjectileSpeed)
+    {
+        this.projectileSpeed = newProjectileSpeed;
     }
 
     private void HandleHit()

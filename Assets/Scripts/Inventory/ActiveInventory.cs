@@ -51,6 +51,8 @@ public class ActiveInventory : Singleton<ActiveInventory>
 
     private void ChangeActiveWeapon()
     {
+        if (PlayerHealth.Instance.IsDead) return;
+        
         // If there is a weapon in the active slot, destroy it
         if (ActiveWeapon.Instance.CurrentActiveWeapon != null)
         {

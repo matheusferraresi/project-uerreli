@@ -69,7 +69,6 @@ public class PlayerHealth : Singleton<PlayerHealth>
             Destroy(ActiveWeapon.Instance.gameObject);
             _currentHealth = 0;
             GetComponent<Animator>().SetTrigger(deathAnimation);
-            Destroy(gameObject);
             StartCoroutine(DeathLoadSceneRoutine());
         }
     }
@@ -77,6 +76,8 @@ public class PlayerHealth : Singleton<PlayerHealth>
     private IEnumerator DeathLoadSceneRoutine()
     {
         yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
+        Stamina.Instance.ResetStamina();
         SceneManager.LoadScene(TownScene);
     }
     

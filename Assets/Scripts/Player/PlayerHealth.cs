@@ -1,9 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : Singleton<PlayerHealth>
 {
+    public bool IsDead { get; private set; }
+    
     [SerializeField] private int maxHealth = 3;
     [SerializeField] private float knockBackThrustAmount = 10f; 
     [SerializeField] private float damageRecoveryTime = 1f;
@@ -15,7 +18,9 @@ public class PlayerHealth : Singleton<PlayerHealth>
     private int _currentHealth;
     private bool _canTakeDamage = true;
     
-    const string HEALTH_SLIDER = "Health Slider";
+    const string HealthSlider = "Health Slider";
+    const string TownScene = "Town";
+    readonly int deathAnimation = Animator.StringToHash("Death");
 
     protected override void Awake()
     {
@@ -26,6 +31,7 @@ public class PlayerHealth : Singleton<PlayerHealth>
 
     private void Start()
     {
+        IsDead = false;
         _currentHealth = maxHealth;
         UpdateHealthSlider();
     }
@@ -57,12 +63,21 @@ public class PlayerHealth : Singleton<PlayerHealth>
     
     private void CheckPlayerDeath()
     {
-        if (_currentHealth <= 0)
+        if (_currentHealth <= 0 && !IsDead)
         {
+            IsDead = true;
+            Destroy(ActiveWeapon.Instance.gameObject);
             _currentHealth = 0;
-            // GameManager.Instance.GameOver();
-            Debug.Log("Player is dead");
+            GetComponent<Animator>().SetTrigger(deathAnimation);
+            Destroy(gameObject);
+            StartCoroutine(DeathLoadSceneRoutine());
         }
+    }
+    
+    private IEnumerator DeathLoadSceneRoutine()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene(TownScene);
     }
     
     public void HealPlayer(int healAmount = 1)
@@ -84,7 +99,7 @@ public class PlayerHealth : Singleton<PlayerHealth>
     {
         if (_healthSlider == null)
         {
-            _healthSlider = GameObject.Find(HEALTH_SLIDER).GetComponent<Slider>();
+            _healthSlider = GameObject.Find(HealthSlider).GetComponent<Slider>();
         }
 
         _healthSlider.maxValue = maxHealth;

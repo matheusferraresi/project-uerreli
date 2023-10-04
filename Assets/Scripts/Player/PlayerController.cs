@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -40,9 +41,16 @@ public class PlayerController : Singleton<PlayerController>
         _playerControls.Enable();
     }
 
+    private void OnDisable()
+    {
+        _playerControls.Disable();
+    }
+
     private void Start()
     {
         _playerControls.Combat.Dash.performed += _ => Dash();
+        
+        ActiveInventory.Instance.EquipStartinWeapon();
     }
 
     private void Update()
@@ -65,7 +73,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Move()
     {
-        if (_knockBack.GettingKnockedBack) return;
+        if (_knockBack.GettingKnockedBack || PlayerHealth.Instance.IsDead) return;
 
         // Multiplying floats first here means you multiply the Vector only once and improves speed
         Vector2 newPosition = _rb.position + _movement * (moveSpeed * Time.fixedDeltaTime);

@@ -85,10 +85,7 @@ public class Pickup : MonoBehaviour
                 PlayerHealth.Instance.HealPlayer();
                 break;
             case PickupType.StaminaGlobe:
-                Debug.Log("Stamina Globe");
-                break;
-            default:
-                Debug.Log("Gold Coin");
+                Stamina.Instance.RefreshStamina();
                 break;
         }
     }

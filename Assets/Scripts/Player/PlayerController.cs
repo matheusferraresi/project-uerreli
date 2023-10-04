@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : Singleton<PlayerController>
@@ -18,17 +16,17 @@ public class PlayerController : Singleton<PlayerController>
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private Knockback _knockBack;
-    
+
     private float _baseMoveSpeed;
     private bool _isDashing;
-  
-    private bool _facingLeft = false;
+
+    private bool _facingLeft;
     public bool FacingLeft => _facingLeft;
 
     protected override void Awake()
     {
         base.Awake();
-        
+
         _playerControls = new PlayerControls();
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
@@ -68,7 +66,7 @@ public class PlayerController : Singleton<PlayerController>
     private void Move()
     {
         if (_knockBack.GettingKnockedBack) return;
-        
+
         // Multiplying floats first here means you multiply the Vector only once and improves speed
         Vector2 newPosition = _rb.position + _movement * (moveSpeed * Time.fixedDeltaTime);
         _rb.MovePosition(newPosition);
@@ -93,12 +91,14 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Dash()
     {
-        if (_isDashing) return;
-        
-        _isDashing = true;
-        moveSpeed *= dashSpeed;
-        playerTrailRenderer.emitting = true;
-        StartCoroutine(EndDashRoutine());
+        if (!_isDashing && Stamina.Instance.CurrentStamina > 0)
+        {
+            Stamina.Instance.UseStamina();
+            _isDashing = true;
+            moveSpeed *= dashSpeed;
+            playerTrailRenderer.emitting = true;
+            StartCoroutine(EndDashRoutine());
+        }
     }
 
     private IEnumerator EndDashRoutine()
@@ -106,7 +106,7 @@ public class PlayerController : Singleton<PlayerController>
         yield return new WaitForSeconds(dashTime);
         moveSpeed = _baseMoveSpeed;
         playerTrailRenderer.emitting = false;
-        
+
         yield return new WaitForSeconds(dashCooldown);
         _isDashing = false;
     }

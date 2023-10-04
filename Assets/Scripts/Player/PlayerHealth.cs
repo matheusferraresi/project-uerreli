@@ -53,7 +53,7 @@ public class PlayerHealth : Singleton<PlayerHealth>
         CheckPlayerDeath();
     }
     
-    public void CheckPlayerDeath()
+    private void CheckPlayerDeath()
     {
         if (_currentHealth <= 0)
         {

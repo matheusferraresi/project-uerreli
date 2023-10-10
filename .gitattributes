@@ -1,2 +1,3 @@
-﻿**/shaders/* linguist-vendored=true
-**/cgi-nc/* linguist-vendored=true
+﻿*.shader linguist-detect=UnityShaderLab
+*.asset linguist-detect=UnityAsset
+*.meta linguist-detect=UnityMeta
